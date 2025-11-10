@@ -50,6 +50,8 @@ main {
 /* ---------------- INPUT FORM ---------------- */
 
 .add-ingredient-form {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -231,4 +233,34 @@ ul.ingredients-list > li {
     transform: scale(1);
     opacity: 1;
   }
+}
+.empty-bg {
+  position: absolute;
+  top: 0px; /* your header height */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* ✅ FIX: actual visible space */
+  background-image: url("/food-pattern.png");
+  background-size: 260px;
+  background-repeat: repeat;
+  opacity: 0.53;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatBG 20s linear infinite;
+}
+
+@keyframes floatBG {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 300px 300px;
+  }
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 80px); /* ✅ ensures background height matches */
 }

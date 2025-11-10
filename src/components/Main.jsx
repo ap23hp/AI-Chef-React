@@ -48,6 +48,10 @@ export default function Main() {
 
   return (
     <main>
+      {ingredients.length === 0 && status === "idle" && (
+        <div className="empty-bg"></div>
+      )}
+
       <form action={addIngredient} className="add-ingredient-form">
         <input
           type="text"
