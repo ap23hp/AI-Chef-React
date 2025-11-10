@@ -52,8 +52,9 @@ main {
 .add-ingredient-form {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 12px;
-  height: 38px;
+  flex-wrap: wrap; /*  allows buttons to wrap on small screens */
 }
 
 .add-ingredient-form > input {
@@ -81,6 +82,7 @@ main {
   background-color: var(--accent);
   color: white;
   width: 150px;
+  height: 35px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;

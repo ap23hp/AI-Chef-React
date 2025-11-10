@@ -12,8 +12,13 @@ export default function Main() {
   });
 
   function addIngredient(formData) {
-    const newIngredient = formData.get("ingredient");
-    if (!newIngredient) return;
+    const newIngredient = formData.get("ingredient").trim();
+
+    //Validation rules
+    if (newIngredient.length < 2) return; // prevent 1-letter
+    if (!/^[a-zA-Z ]+$/.test(newIngredient)) return; // only letters & spaces
+    if (ingredients.includes(newIngredient.toLowerCase())) return; // prevent duplicates
+
     setIngredients((prev) => [...prev, newIngredient]);
   }
 
@@ -50,7 +55,21 @@ export default function Main() {
           aria-label="Add ingredient"
           name="ingredient"
         />
-        <button>Add ingredient</button>
+        <button type="submit">Add ingredient</button>
+
+        {status === "success" && (
+          <button
+            type="button"
+            className="start-over-btn"
+            onClick={() => {
+              setIngredients([]);
+              setRecipeText("");
+              setStatus("idle");
+            }}
+          >
+            Start Over
+          </button>
+        )}
       </form>
 
       {ingredients.length > 0 && (
@@ -80,12 +99,16 @@ export default function Main() {
           </div>
         )}
 
-        {status === "success" && <h2>AI Chef Recommends:</h2>}
-
         {status === "success" && (
-          <article className="suggested-recipe-container" aria-live="polite">
-            <ReactMarkdown>{recipeText}</ReactMarkdown>
-          </article>
+          <>
+            <div className="top-bar">
+              <h2>AI Chef Recommends:</h2>
+            </div>
+
+            <article className="suggested-recipe-container" aria-live="polite">
+              <ReactMarkdown>{recipeText}</ReactMarkdown>
+            </article>
+          </>
         )}
       </section>
     </main>
