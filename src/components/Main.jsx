@@ -1,4 +1,6 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import chefLoading from "../assets/images/chef-cooking.gif";
 
 export default function Main() {
   const [ingredients, setIngredients] = useState([]);
@@ -72,14 +74,17 @@ export default function Main() {
 
       <section className="section2">
         {status === "loading" && (
-          <h2 className="loadingText">AI chef is thinking....</h2>
+          <div className="chef-loader">
+            <img src={chefLoading} alt="AI Chef cooking..." />
+            <p>AI Chef is cooking your recipe…</p>
+          </div>
         )}
 
         {status === "success" && <h2>AI Chef Recommends:</h2>}
 
         {status === "success" && (
           <article className="suggested-recipe-container" aria-live="polite">
-            {recipeText}
+            <ReactMarkdown>{recipeText}</ReactMarkdown>
           </article>
         )}
       </section>
