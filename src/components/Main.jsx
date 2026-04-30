@@ -50,11 +50,7 @@ export default function Main() {
 
   return (
     <main>
-      {ingredients.length === 0 && status === "idle" && (
-        <div className="empty-bg" />
-      )}
-
-      <p className="prompt-label">
+    <p className="prompt-label">
         What&apos;s in your <span>kitchen?</span>
       </p>
       <p className="prompt-sub">
