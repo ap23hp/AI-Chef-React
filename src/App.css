@@ -507,25 +507,6 @@ ul.ingredients-list > li:nth-child(4n+4) { background: #ffcce1; }
   margin: 24px 0;
 }
 
-/* EMPTY BG */
-
-.empty-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-image: url("/food-pattern.png");
-  background-size: 200px;
-  background-repeat: repeat;
-  opacity: 0.18;
-  z-index: 0;
-  pointer-events: none;
-  animation: floatBG 22s linear infinite;
-}
-
-@keyframes floatBG {
-  from { background-position: 0 0; }
-  to   { background-position: 300px 300px; }
-}
 
 /* RESPONSIVE */
 
