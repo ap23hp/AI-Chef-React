@@ -7,18 +7,15 @@ export default function Main() {
   const [status, setStatus] = useState("idle");
   const [recipeText, setRecipeText] = useState("");
 
-  let ingredientsList = ingredients.map((ingredient, index) => {
-    return <li key={index}>{ingredient}</li>;
-  });
+  const ingredientsList = ingredients.map((ingredient, index) => (
+    <li key={index}>{ingredient}</li>
+  ));
 
   function addIngredient(formData) {
     const newIngredient = formData.get("ingredient").trim();
-
-    //Validation rules
-    if (newIngredient.length < 2) return; // prevent 1-letter
-    if (!/^[a-zA-Z ]+$/.test(newIngredient)) return; // only letters & spaces
-    if (ingredients.includes(newIngredient.toLowerCase())) return; // prevent duplicates
-
+    if (newIngredient.length < 2) return;
+    if (!/^[a-zA-Z ]+$/.test(newIngredient)) return;
+    if (ingredients.includes(newIngredient.toLowerCase())) return;
     setIngredients((prev) => [...prev, newIngredient]);
   }
 
@@ -28,13 +25,12 @@ export default function Main() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ingredients }),
     });
-
     const data = await response.json();
     return data.recipe;
   }
+
   async function handleGetRecipe() {
     setStatus("loading");
-
     try {
       const recipe = await getRecipe(ingredients);
       setRecipeText(recipe);
@@ -46,50 +42,59 @@ export default function Main() {
     }
   }
 
+  function handleStartOver() {
+    setIngredients([]);
+    setRecipeText("");
+    setStatus("idle");
+  }
+
   return (
     <main>
       {ingredients.length === 0 && status === "idle" && (
-        <div className="empty-bg"></div>
+        <div className="empty-bg" />
       )}
+
+      <p className="prompt-label">
+        What&apos;s in your <span>kitchen?</span>
+      </p>
+      <p className="prompt-sub">
+        Toss in what you&apos;ve got — we&apos;ll make something delicious.
+      </p>
 
       <form action={addIngredient} className="add-ingredient-form">
         <input
           type="text"
-          placeholder="e.g. oregano"
+          placeholder="e.g. garlic, eggs, thyme…"
           aria-label="Add ingredient"
           name="ingredient"
         />
-        <button type="submit">Add ingredient</button>
-
-        {status === "success" && (
-          <button
-            type="button"
-            className="start-over-btn"
-            onClick={() => {
-              setIngredients([]);
-              setRecipeText("");
-              setStatus("idle");
-            }}
-          >
-            Start Over
-          </button>
-        )}
+        <button type="submit">Add</button>
       </form>
+
+      {status === "success" && (
+        <button type="button" className="start-over-btn" onClick={handleStartOver}>
+          ↩ start over
+        </button>
+      )}
 
       {ingredients.length > 0 && (
         <section className="section1">
-          <h2>Ingredients on hand:</h2>
+          <div className="section1-header">
+            <h2>Ingredients on hand</h2>
+            <span className="badge-count">{ingredients.length}</span>
+          </div>
+
           <ul className="ingredients-list" aria-live="polite">
             {ingredientsList}
           </ul>
 
-          {ingredients.length > 3 && (
+          {ingredients.length > 3 && status !== "success" && status !== "loading" && (
             <div className="get-recipe-container">
               <div>
-                <h3>Ready for a recipe?</h3>
-                <p>Generate a recipe from your list of ingredients.</p>
+                <h3>Ready to cook? ✦</h3>
+                <p>Generate a recipe from your ingredients.</p>
               </div>
-              <button onClick={handleGetRecipe}>Get a recipe</button>
+              <button onClick={handleGetRecipe}>Get a recipe →</button>
             </div>
           )}
         </section>
@@ -98,17 +103,17 @@ export default function Main() {
       <section className="section2">
         {status === "loading" && (
           <div className="chef-loader">
-            <img src={chefLoading} alt="AI Chef cooking..." />
-            <p>AI Chef is cooking your recipe…</p>
+            <img src={chefLoading} alt="AI Chef is cooking…" />
+            <p>Cooking something up…</p>
           </div>
         )}
 
         {status === "success" && (
           <>
             <div className="top-bar">
-              <h2>AI Chef Recommends:</h2>
+              <span className="star-deco">✦</span>
+              <h2>Your Recipe</h2>
             </div>
-
             <article className="suggested-recipe-container" aria-live="polite">
               <ReactMarkdown>{recipeText}</ReactMarkdown>
             </article>
