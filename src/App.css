@@ -94,7 +94,7 @@ header > h1 em {
 
 .strip-inner {
   display: inline-block;
-  animation: marquee 18s linear infinite;
+  animation: marquee 88s linear infinite;
 }
 
 @keyframes marquee {
